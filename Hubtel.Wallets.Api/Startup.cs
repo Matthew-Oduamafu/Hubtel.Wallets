@@ -1,5 +1,4 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using AspNetCoreRateLimit;
 using Hubtel.Wallets.Api.Middleware;
 using Hubtel.Wallets.Application;
 using Hubtel.Wallets.Identity;
@@ -8,11 +7,13 @@ using Hubtel.Wallets.Persistence;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Hubtel.Wallets.Api
@@ -33,22 +34,36 @@ namespace Hubtel.Wallets.Api
 
             services.ConfigurePersistenceService(this.Configuration);
             services.ConfigureIdentityService(this.Configuration);
+
+            services.AddMemoryCache();  // set up memory cache for rate limiting
+
+            services.AddResponseCaching();  // setting up caching
+            services.ConfigureHttpCacheHeaders();
+            services.ConfigureRateLimiting();
+
             services.ConfigureInfrastructureService(this.Configuration);
             services.ConfigureApplicationService();
 
-            services.AddControllers();
-            //services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hubtel.Wallets.Api", Version = "v1" }));
+            // Add services to the container.
+            services.AddControllers(config =>
+            {
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                {
+                    Duration = 120
+                });
+            }).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.ConfigureVersioning();  // setting up API versioning
         }
 
         private void AddSwaggerDoc(IServiceCollection services)
         {
-            // Register FV validators
-            services.AddValidatorsFromAssemblyContaining<Startup>(lifetime: ServiceLifetime.Scoped);
-
             // Add FV to Asp.net
-            services.AddFluentValidationAutoValidation();
+            //services.AddFluentValidationAutoValidation();
+            // Add FV
+            //services.AddFluentValidationAutoValidation()
+            //.AddFluentValidationClientsideAdapters();
 
-            // Adds FluentValidationRules staff to Swagger. (Minimal configuration)
+            // Adds FluentValidationRules staff to Swagger.
             services.AddFluentValidationRulesToSwagger();
 
             // Adds logging
@@ -99,6 +114,13 @@ namespace Hubtel.Wallets.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // configure custom error handler
+            app.ConfigureExceptionHabdler();
+
+            app.UseResponseCaching();  // register middleware
+            app.UseHttpCacheHeaders();  // register caching to middle ware
+            app.UseIpRateLimiting();  // register rate limiting in middle ware
 
             app.UseMiddleware<ExceptionMiddleware>();
 

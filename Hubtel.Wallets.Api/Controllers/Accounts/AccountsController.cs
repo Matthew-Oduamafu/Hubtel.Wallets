@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Hubtel.Wallets.Api.Controllers.Accounts
 {
     [Route("api/[controller]/[action]")]
+    [Produces("application/json")]
     [ApiController]
     public class AccountsController : ControllerBase
     {
