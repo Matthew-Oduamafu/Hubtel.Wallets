@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5F3F7D4C-83E1-4727-98D9-2F198B13ADD0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B6A80C43-7914-42EB-BD04-59D171D23F1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{C4C942EA-03B3-43B1-978E-F0B7915A20C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{BF249620-E95E-4A69-8E18-C625BFB74002}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{B546845D-5DB4-4249-B3C8-FF3ACDC9339B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Api", "Hubtel.Wallets.Api\Hubtel.Wallets.Api.csproj", "{14C0181D-D61B-4CC3-9261-3F2AEA768182}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B} = {7EAAF03E-841C-4A26-9C8B-638B09E5969B}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Domain", "Hubtel.Wallets.Domain\Hubtel.Wallets.Domain.csproj", "{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Application", "Hubtel.Wallets.Application\Hubtel.Wallets.Application.csproj", "{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Infrastructure", "Hubtel.Wallets.Infrastructure\Hubtel.Wallets.Infrastructure.csproj", "{235F0165-04FE-41AE-A488-69C3AC3BAF68}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Persistence", "Hubtel.Wallets.Persistence\Hubtel.Wallets.Persistence.csproj", "{DC32851E-4E77-4D17-A858-4F8A08B64290}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hubtel.Wallets.Identity", "Hubtel.Wallets.Identity\Hubtel.Wallets.Identity.csproj", "{7EAAF03E-841C-4A26-9C8B-638B09E5969B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14C0181D-D61B-4CC3-9261-3F2AEA768182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C0181D-D61B-4CC3-9261-3F2AEA768182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C0181D-D61B-4CC3-9261-3F2AEA768182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C0181D-D61B-4CC3-9261-3F2AEA768182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235F0165-04FE-41AE-A488-69C3AC3BAF68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235F0165-04FE-41AE-A488-69C3AC3BAF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235F0165-04FE-41AE-A488-69C3AC3BAF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235F0165-04FE-41AE-A488-69C3AC3BAF68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC32851E-4E77-4D17-A858-4F8A08B64290}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC32851E-4E77-4D17-A858-4F8A08B64290}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC32851E-4E77-4D17-A858-4F8A08B64290}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC32851E-4E77-4D17-A858-4F8A08B64290}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4C942EA-03B3-43B1-978E-F0B7915A20C1} = {5F3F7D4C-83E1-4727-98D9-2F198B13ADD0}
+		{BF249620-E95E-4A69-8E18-C625BFB74002} = {5F3F7D4C-83E1-4727-98D9-2F198B13ADD0}
+		{B546845D-5DB4-4249-B3C8-FF3ACDC9339B} = {5F3F7D4C-83E1-4727-98D9-2F198B13ADD0}
+		{14C0181D-D61B-4CC3-9261-3F2AEA768182} = {C4C942EA-03B3-43B1-978E-F0B7915A20C1}
+		{B7F32C3E-ACCB-4A6E-94E1-0EC32F730108} = {BF249620-E95E-4A69-8E18-C625BFB74002}
+		{ECCFDFED-6EE2-4D67-9AF0-0C7411C6E69F} = {BF249620-E95E-4A69-8E18-C625BFB74002}
+		{235F0165-04FE-41AE-A488-69C3AC3BAF68} = {B546845D-5DB4-4249-B3C8-FF3ACDC9339B}
+		{DC32851E-4E77-4D17-A858-4F8A08B64290} = {B546845D-5DB4-4249-B3C8-FF3ACDC9339B}
+		{7EAAF03E-841C-4A26-9C8B-638B09E5969B} = {B546845D-5DB4-4249-B3C8-FF3ACDC9339B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D623B0D4-094C-42DE-ABB2-796349D2C9BC}
+	EndGlobalSection
+EndGlobal
