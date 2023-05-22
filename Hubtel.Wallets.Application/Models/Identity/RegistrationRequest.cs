@@ -1,15 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Hubtel.Wallets.Application.Models.Identity
+﻿namespace Hubtel.Wallets.Application.Models.Identity
 {
-    public class RegistrationRequest
+    public class RegistrationRequest : AuthRequest
     {
-        [Required]
-        [MinLength(3)]
         public string FirstName { get; set; }
 
-        [Required]
-        [MinLength(3)]
         public string LastName { get; set; }
 
         public string UserName
@@ -20,15 +14,6 @@ namespace Hubtel.Wallets.Application.Models.Identity
             }
         }
 
-        [Required]
-        [MinLength(10)]
         public string PhoneNumber { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
-        [MinLength(6)]
-        public string Password { get; set; }
     }
 }

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hubtel.Wallets.Application\Hubtel.Wallets.Application.csproj" />
     <ProjectReference Include="..\Hubtel.Wallets.Domain\Hubtel.Wallets.Domain.csproj" />
+    <ProjectReference Include="..\Hubtel.Wallets.Identity\Hubtel.Wallets.Identity.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Hubtel.Wallets.Application.Contracts.Persistence;
+﻿using Hubtel.Wallets.Application.Contracts.Identity;
+using Hubtel.Wallets.Application.Contracts.Persistence;
 using Hubtel.Wallets.Domain.Models;
 using Hubtel.Wallets.Persistence.Context;
 using System;
@@ -19,6 +20,7 @@ namespace Hubtel.Wallets.Persistence.Repositories
         private IBaseRepository<VwCreditAccountsForUser> _vwCreditAccountsForUserRepository;
         private IBaseRepository<TblUcaUserCreditAccount> _tblUcaUserCreditAccountRepository;
         private IBaseRepository<VwUserRolesAndClaim> _vwUserRolesAndClaimsRepository;
+        private IAuthService _applicationUser;
 
         public UnitOfWork(
             HubtelWalletsDbContext context
@@ -30,7 +32,8 @@ namespace Hubtel.Wallets.Persistence.Repositories
             , IBaseRepository<VwUcaUserCreditAccount> vwUcaUserCreditAccountRepository
             , IBaseRepository<VwCreditAccountsForUser> vwCreditAccountsForUserRepository
             , IBaseRepository<TblUcaUserCreditAccount> tblUcaUserCreditAccountRepository
-            , IBaseRepository<VwUserRolesAndClaim> vwUserRolesAndClaimsRepository)
+            , IBaseRepository<VwUserRolesAndClaim> vwUserRolesAndClaimsRepository
+            , IAuthService authService)
         {
             _dbContext = context;
             _accountSchemesRepository = accountSchemesRepository;
@@ -42,6 +45,7 @@ namespace Hubtel.Wallets.Persistence.Repositories
             _vwCreditAccountsForUserRepository = vwCreditAccountsForUserRepository;
             _tblUcaUserCreditAccountRepository = tblUcaUserCreditAccountRepository;
             _vwUserRolesAndClaimsRepository = vwUserRolesAndClaimsRepository;
+            _applicationUser = authService;
         }
 
         public IBaseRepository<object> DefaultObjects => _obectRepository ?? new BaseRepository<object>(_dbContext);
@@ -62,6 +66,8 @@ namespace Hubtel.Wallets.Persistence.Repositories
         public IBaseRepository<TblUcaUserCreditAccount> TblUcaUserCreditAccount => _tblUcaUserCreditAccountRepository ?? new BaseRepository<TblUcaUserCreditAccount>(_dbContext);
 
         public IBaseRepository<VwUserRolesAndClaim> VwUserRolesAndClaims => _vwUserRolesAndClaimsRepository ?? new BaseRepository<VwUserRolesAndClaim>(_dbContext);
+
+        public IAuthService ApplicationUser => _applicationUser;
 
         public void Dispose()
         {

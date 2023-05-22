@@ -1,4 +1,5 @@
-﻿using Hubtel.Wallets.Domain.Models;
+﻿using Hubtel.Wallets.Application.Contracts.Identity;
+using Hubtel.Wallets.Domain.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@ namespace Hubtel.Wallets.Application.Contracts.Persistence
         IBaseRepository<VwUcaUserCreditAccount> AllCreditAccounts { get; }
         IBaseRepository<TblUcaUserCreditAccount> TblUcaUserCreditAccount { get; }
         IBaseRepository<VwUserRolesAndClaim> VwUserRolesAndClaims { get; }
+
+        IAuthService ApplicationUser { get; }
 
         Task Save();
     }

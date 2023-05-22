@@ -19,15 +19,38 @@ namespace Hubtel.Wallets.Api.Controllers.Accounts
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), 200)]
+        [ProducesResponseType(typeof(AuthBadResponse), 404)]
+        [ProducesResponseType(typeof(AuthBadResponse), 400)]
         public async Task<IActionResult> Login(AuthRequest request)
         {
-            return Ok(await _mediator.Send(new LoginCommand { AuthRequest = request }));
+            var response = await _mediator.Send(new LoginCommand { AuthRequest = request });
+            if (response is AuthBadResponse)
+            {
+                if (((AuthBadResponse)response).StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    return BadRequest(response);
+                }
+                else
+                {
+                    return NotFound(response);
+                }
+            }
+            return Ok(response);
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(RegistrationResponse), 200)]
+        //[ProducesResponseType(typeof(AuthBadResponse), 404)]
+        [ProducesResponseType(typeof(RegistrationBadResponse), 400)]
         public async Task<IActionResult> Register(RegistrationRequest request)
         {
-            return Ok(await _mediator.Send(new RegisterCommand { RegistrationRequest = request }));
+            var response = await _mediator.Send(new RegisterCommand { RegistrationRequest = request });
+            if (response is RegistrationBadResponse)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
     }
 }

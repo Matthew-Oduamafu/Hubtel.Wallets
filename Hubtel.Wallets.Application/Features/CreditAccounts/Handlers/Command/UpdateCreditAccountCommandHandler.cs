@@ -44,7 +44,7 @@ namespace Hubtel.Wallets.Application.Features.CreditAccounts.Handlers.Command
             TblTtype ttype = await _unitOfWork.Ttypes.Get(x => x.TIdpk == request.dto.UcaTypeIdfk);
             if (ttype.TTypeName.ToLower().Replace(@"""""", "'") == "card")
             {
-                var first6 = string.Join("", payload.UcaAccountNumber.Take(6));
+                var first6 = string.Join("", payload.UcaAccountNumber[..6]);
                 var r = first6 + string.Join("", payload.UcaAccountNumber[6..].Select(_ => "x"));
                 payload.UcaAccountNumber = r;
             }

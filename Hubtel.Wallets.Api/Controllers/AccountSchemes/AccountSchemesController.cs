@@ -16,6 +16,10 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
     [Produces("application/json")]
     [ApiController]
     [Authorize(Roles = "Administrator")]
+    [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
+    [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
+    [SwaggerResponse(500, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
+    [ProducesResponseType(typeof(object), 429)]
     public class AccountSchemesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -33,9 +37,6 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
             Tags = new[] { "AccountSchemes" }
         )]
         [SwaggerResponse(200, "Success! Your request was processed successfully. Here is the data you requested.", typeof(IReadOnlyList<AccountSchemeGetDto>))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> GetAllAccountSchemesByType([FromQuery] int typeId)
         {
             var response = await _mediator.Send(new GetAllAccountSchemesByTypeRequest { TypeId = typeId });
@@ -50,9 +51,6 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
             Tags = new[] { "AccountSchemes" }
         )]
         [SwaggerResponse(200, "Success! Your request was processed successfully. Here is the data you requested.", typeof(IReadOnlyList<AccountSchemeGetDto>))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> GetAllAccountSchemes()
         {
             var response = await _mediator.Send(new GetAllAccountSchemesRequest());
@@ -68,9 +66,6 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         )]
         [SwaggerResponse(200, "Success! Your request was processed successfully. Here is the data you requested.", typeof(AccountSchemeGetDto))]
         [SwaggerResponse(204, "Your request was successful, but there is no content to return.")]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> GetSingleAccountScheme([FromRoute] int id)
         {
             var response = await _mediator.Send(new GetSingleAccountSchemeRequest { Id = id });
@@ -89,9 +84,6 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
             Tags = new[] { "AccountSchemes" }
         )]
         [SwaggerResponse(200, "Success! Your request was processed successfully. Here is the data you requested.", typeof(IReadOnlyList<VwTnsTypeAndSchemeGetDto>))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> GetAllTypesAndSchemes()
         {
             var response = await _mediator.Send(new GetAllTypesAndSchemesRequest());
@@ -103,15 +95,12 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [HttpPost]
         [SwaggerOperation(
             Summary = "Add a new payment scheme",
-            Description = "Requires admin privileges</br>. If successful returns a response with <strong>Success=</strong><i>true</i>",
+            Description = "Requires admin privileges.</br>Create a scheme for Payment Type.</br>Make sure to pass the Id of payment type to the payload</br>If successful returns a response with <strong>Success=</strong><i>true</i>",
             OperationId = "CreateAccountScheme",
             Tags = new[] { "AccountSchemes" }
         )]
         [SwaggerResponse(201, "Created. Resource successfully created.</br>Please check the response for recently created Id.", typeof(BaseResponse))]
         [SwaggerResponse(400, "Bad Request. Oops! Your request is invalid or malformed. </br>Please review <strong>Schema</strong> for payload requirement and resend a valid request.", typeof(BaseResponse))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> CreateAccountScheme([FromBody] CreateAccountSchemeDto dto)
         {
             var response = await _mediator.Send(new CreateAccountSchemeCommand { dto = dto });
@@ -125,16 +114,13 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [HttpPut]
         [SwaggerOperation(
             Summary = "Update a payment scheme",
-            Description = "Requires admin privileges</br>. If successful returns a response with <strong>Success=</strong><i>true</i>",
+            Description = "Requires admin privileges</br>.Update a scheme for Payment Type.</br>Make sure to pass the Id of payment type to the payload</br>If successful returns a response with <strong>Success=</strong><i>true</i>",
             OperationId = "UpdateAccountScheme",
             Tags = new[] { "AccountSchemes" }
         )]
         [SwaggerResponse(202, "Accepted. Your request has been accepted and is updated.", typeof(BaseResponse))]
         [SwaggerResponse(400, "Bad Request. Oops! Your request is invalid or malformed. </br>Please review <strong>Schema</strong> for payload requirement and resend a valid request.", typeof(BaseResponse))]
         [SwaggerResponse(404, "Not Found. Sorry, the requested resource could not be found. </br>Please review <strong>Schema</strong> for payload requirement and resend a valid request or try again with a different one.", typeof(BaseResponse))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(501, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> UpdateAccountScheme([FromBody] UpdateAccountSchemeDto dto)
         {
             var response = await _mediator.Send(new UpdateAccountSchemeCommand { dto = dto });
@@ -159,9 +145,6 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [SwaggerResponse(204, "No Content. Your request was successful, but there is no content to return.")]
         [SwaggerResponse(400, "Bad Request. Oops! Your request is invalid or malformed. </br>Please review Please review and resend a valid request.", typeof(BaseResponse))]
         [SwaggerResponse(404, "Not Found. Sorry, the requested resource could not be found. </br>Please review Please review and resend a valid request or try again with a different one.", typeof(BaseResponse))]
-        [SwaggerResponse(401, "Unauthorized. Access to the requested resource requires authentication.", typeof(string))]
-        [SwaggerResponse(403, "Restricted Access. Access denied, requires admin privileges.", typeof(string))]
-        [SwaggerResponse(500, "Oops! Something went wrong on our end. We're working to fix the issue. Please try again later")]
         public async Task<IActionResult> DeleteAccountScheme([FromQuery] int Id)
         {
             var response = await _mediator.Send(new DeleteAccountSchemeCommand { Id = Id });

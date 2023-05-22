@@ -16,7 +16,11 @@ namespace Hubtel.Wallets.Application.Features.CreditAccounts.Validators
             ClassLevelCascadeMode = CascadeMode.Stop;
             RuleLevelCascadeMode = CascadeMode.Stop;
 
-            RuleFor(x => x.UcaUserIdfk).NotNull().NotEmpty();
+            RuleFor(x => x.UcaUserIdfk).NotNull().NotEmpty().UnlessAsync(async (x, c) =>
+            {
+                var result = await _unitOfWork.ApplicationUser.UserExistsByIdAsync(x.UcaUserIdfk);
+                return result;
+            }).WithMessage("Invalid user Id");
 
             RuleFor(x => x.UcaTypeIdfk).NotNull().GreaterThanOrEqualTo(1)
                 .MustAsync(async (id, c) =>

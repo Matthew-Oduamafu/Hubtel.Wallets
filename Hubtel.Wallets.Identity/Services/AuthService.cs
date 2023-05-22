@@ -27,6 +27,11 @@ namespace Hubtel.Wallets.Identity.Services
             _jwtSettings = options.Value;
         }
 
+        public async Task<bool> UserExistsByIdAsync(string userId)
+        {
+            return (await _userManager.FindByIdAsync(userId)) != null;
+        }
+
         public async Task<AuthResponse> Login(AuthRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -84,7 +89,7 @@ namespace Hubtel.Wallets.Identity.Services
                 }
                 else
                 {
-                    throw new Exception($"{result.Errors}");
+                    throw new Exception($"{string.Join(", ", result.Errors.Select(x => x.Description))}");
                 }
             }
             else

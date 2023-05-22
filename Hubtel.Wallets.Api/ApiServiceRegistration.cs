@@ -1,6 +1,5 @@
 ﻿using AspNetCoreRateLimit;
 using Hubtel.Wallets.Application.Models;
-using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -47,23 +46,6 @@ namespace Hubtel.Wallets.Api
             });
         }
 
-        public static IServiceCollection ConfigureHttpCacheHeaders(this IServiceCollection services)
-        {
-            services.AddResponseCaching();
-            services.AddHttpCacheHeaders(
-                (expirationOpt) =>
-                {
-                    expirationOpt.MaxAge = 120;
-                    expirationOpt.CacheLocation = CacheLocation.Private;
-                },
-                (validationOpt) =>
-                {
-                    validationOpt.MustRevalidate = true;
-                });
-
-            return services;
-        }
-
         public static void ConfigureRateLimiting(this IServiceCollection services)
         {
             var rateLimitRules = new List<RateLimitRule>
@@ -71,8 +53,14 @@ namespace Hubtel.Wallets.Api
                 new RateLimitRule
                 {
                     Endpoint = "*",
-                    Limit= 100,
-                    Period = "10m"  // "10m"  "10s" "10h"
+                    Limit= 10,
+                    Period = "10s",  // "10m"  "10s" "10h",
+                    QuotaExceededResponse= new QuotaExceededResponse
+                    {
+                       Content = "Too Many Requests. \r\nOops! You have exceeded the rate limit for accessing this service. Please wait and try again later.",
+                       ContentType = "application/text",
+                       StatusCode = StatusCodes.Status429TooManyRequests
+                    }
                 }
             };
 

@@ -1,4 +1,5 @@
 using AspNetCoreRateLimit;
+using FluentValidation.AspNetCore;
 using Hubtel.Wallets.Api.Middleware;
 using Hubtel.Wallets.Application;
 using Hubtel.Wallets.Identity;
@@ -7,13 +8,12 @@ using Hubtel.Wallets.Persistence;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Hubtel.Wallets.Api
@@ -30,35 +30,31 @@ namespace Hubtel.Wallets.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AddSwaggerDoc(services);
-
-            services.ConfigurePersistenceService(this.Configuration);
-            services.ConfigureIdentityService(this.Configuration);
+            // configure Redis caching
+            services.ConfigureRedisCacheService(this.Configuration);
 
             services.AddMemoryCache();  // set up memory cache for rate limiting
-
-            services.AddResponseCaching();  // setting up caching
-            services.ConfigureHttpCacheHeaders();
             services.ConfigureRateLimiting();
 
             services.ConfigureInfrastructureService(this.Configuration);
             services.ConfigureApplicationService();
 
             // Add services to the container.
-            services.AddControllers(config =>
-            {
-                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
-                {
-                    Duration = 120
-                });
-            }).AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddControllers();
+
             services.ConfigureVersioning();  // setting up API versioning
+
+            AddSwaggerDoc(services);
+
+            services.ConfigurePersistenceService(this.Configuration);
+            services.ConfigureIdentityService(this.Configuration);
         }
 
         private void AddSwaggerDoc(IServiceCollection services)
         {
             // Add FV to Asp.net
-            //services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+
             // Add FV
             //services.AddFluentValidationAutoValidation()
             //.AddFluentValidationClientsideAdapters();
@@ -103,6 +99,21 @@ namespace Hubtel.Wallets.Api
                 {
                     Title = "Hubtel.Wallet.Api",
                     Version = "v1",
+                    Description = "An API service to be used to manage a user's wallet on the Hubtel app",
+                    Contact = new OpenApiContact
+                    {
+                        Email = "mattoduamafu@gmail.com",
+                        Extensions = { },
+                        Name = "Matthew",
+                        Url = new Uri("https://github.com/Matthew-Oduamafu")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "License",
+                        Url = new Uri("https://github.com/")
+                    },
+                    Extensions = { },
+                    TermsOfService = new Uri("https://github.com/Matthew-Oduamafu")
                 });
             });
         }
@@ -115,14 +126,10 @@ namespace Hubtel.Wallets.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ExceptionMiddleware>();
+
             // configure custom error handler
             app.ConfigureExceptionHabdler();
-
-            app.UseResponseCaching();  // register middleware
-            app.UseHttpCacheHeaders();  // register caching to middle ware
-            app.UseIpRateLimiting();  // register rate limiting in middle ware
-
-            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthentication();
 
@@ -131,6 +138,7 @@ namespace Hubtel.Wallets.Api
 
             app.UseHttpsRedirection();
 
+            app.UseIpRateLimiting();  // register rate limiting in middle ware
             app.UseRouting();
 
             app.UseAuthorization();
