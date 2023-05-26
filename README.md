@@ -59,3 +59,9 @@ This is a WebAPI project built with ASP.NET Core 3.1, following clean architectu
 ```
 
 5. Access the API using your preferred HTTP client.
+
+<br/>
+<br/>
+<br/>
+
+![cleanArch](https://github.com/Matthew-Oduamafu/Hubtel.Wallets/assets/72637895/36d5efcd-f392-4cad-9e95-94e3ff5321f3)
