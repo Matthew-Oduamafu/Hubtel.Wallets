@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Errors.Model;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -34,18 +35,18 @@ namespace Hubtel.Wallets.Api.Middleware
             context.Response.ContentType = "application/json";
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
 
+            Debug.Assert(ex.TargetSite != null, "ex.TargetSite != null");
             string result = JsonConvert.SerializeObject(new ErrorDetails { ErrorMessage = ex.Message, ErrorType = "Failure", Source = ex.Source, TargetSite = ex.TargetSite.Name });
 
             switch (ex)
             {
-                case BadRequestException badRequestException: statusCode = HttpStatusCode.BadRequest; break;
+                case BadRequestException _: statusCode = HttpStatusCode.BadRequest; break;
                 case ValidationException validationException:
                     statusCode = HttpStatusCode.BadRequest;
                     result = JsonConvert.SerializeObject(validationException.Errors);
                     break;
 
-                case NotFoundException notFoundException: statusCode = HttpStatusCode.NotFound; break;
-                default: break;
+                case NotFoundException _: statusCode = HttpStatusCode.NotFound; break;
             }
 
             context.Response.StatusCode = (int)statusCode;

@@ -60,7 +60,7 @@ namespace Hubtel.Wallets.Persistence.Repositories
             return result;
         }
 
-        public async Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> GetFirst(Expression<Func<TEntity, bool>> predicate)
         {
             return (await _context.Set<TEntity>().FirstOrDefaultAsync(predicate));
         }

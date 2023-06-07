@@ -11,4 +11,5 @@ namespace Hubtel.Wallets.Application.Contracts.Identity
 
         Task<bool> UserExistsByIdAsync(string userId);
     }
+
 }

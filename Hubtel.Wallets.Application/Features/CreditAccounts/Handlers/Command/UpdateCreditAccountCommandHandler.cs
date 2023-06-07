@@ -41,7 +41,7 @@ namespace Hubtel.Wallets.Application.Features.CreditAccounts.Handlers.Command
             }
 
             // the part of card number
-            TblTtype ttype = await _unitOfWork.Ttypes.Get(x => x.TIdpk == request.dto.UcaTypeIdfk);
+            TblTtype ttype = await _unitOfWork.Ttypes.GetFirst(x => x.TIdpk == request.dto.UcaTypeIdfk);
             if (ttype.TTypeName.ToLower().Replace(@"""""", "'") == "card")
             {
                 var first6 = string.Join("", payload.UcaAccountNumber[..6]);

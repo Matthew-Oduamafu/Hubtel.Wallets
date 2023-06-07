@@ -21,7 +21,7 @@ namespace Hubtel.Wallets.Identity
 
             services.AddDbContext<HubtelWalletsIdentityDbContext>(
 
-                options => options.UseSqlServer(configuration.GetConnectionString("HubtelWalletsConnString"),
+                options => options.UseSqlServer(configuration.GetConnectionString("HubtelWalletsConnString")!,
                 sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(HubtelWalletsIdentityDbContext).Assembly.FullName);
@@ -50,7 +50,7 @@ namespace Hubtel.Wallets.Identity
                     ClockSkew = TimeSpan.Zero,
                     ValidIssuer = configuration["JwtSettings:Issuer"],
                     ValidAudience = configuration["JwtSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!))
                 };
             });
 

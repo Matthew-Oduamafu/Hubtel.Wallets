@@ -12,7 +12,8 @@ namespace Hubtel.Wallets.Infrastructure
     {
         public static IServiceCollection ConfigureInfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            //services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.ConfigureOptions<EmailSettingsSetup>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
@@ -30,7 +31,7 @@ namespace Hubtel.Wallets.Infrastructure
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = redisCacheSettings.RedisConnectionString;
-                options.InstanceName = "Hubtel.Wallet.Api_";
+                options.InstanceName = "Hubtel.Wallet.Api:";
             });
 
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();

@@ -10,11 +10,17 @@ namespace Hubtel.Wallets.Persistence
 {
     public static class PersistenceServiceRegistration
     {
-        public static IServiceCollection ConfigurePersistenceService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigurePersistenceService(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddDbContext<HubtelWalletsDbContext>(options => options.UseSqlServer(
-                configuration.GetConnectionString("HubtelWalletsConnString")
-                , sqlServerOptionsAction: sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null)));
+                configuration.GetConnectionString("HubtelWalletsConnString")!
+                , sqlServerOptionsAction:
+                sqlOptions => sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null)
+            ));
 
             // add repositories and unitOfWork
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

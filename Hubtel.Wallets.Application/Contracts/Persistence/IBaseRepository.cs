@@ -19,7 +19,7 @@ namespace Hubtel.Wallets.Application.Contracts.Persistence
 
         Task<int> GetCount(Expression<Func<TEntity, bool>> predicate);
 
-        Task<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> GetFirst(Expression<Func<TEntity, bool>> predicate);
 
         Task<bool> Exists(int id);
 

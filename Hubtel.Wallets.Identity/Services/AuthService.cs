@@ -18,7 +18,7 @@ namespace Hubtel.Wallets.Identity.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private JwtSettings _jwtSettings;
+        private readonly JwtSettings _jwtSettings;
 
         public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> options)
         {
@@ -37,13 +37,13 @@ namespace Hubtel.Wallets.Identity.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new System.Exception($"User with {request.Email} not found");
+                throw new Exception($"User with {request.Email} not found");
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                throw new System.Exception($"Credentials for {request.Email} are invalid");
+                throw new Exception($"Credentials for {request.Email} are invalid");
             }
 
             JwtSecurityToken jwtSecurityToken = await GenerateToken(user);

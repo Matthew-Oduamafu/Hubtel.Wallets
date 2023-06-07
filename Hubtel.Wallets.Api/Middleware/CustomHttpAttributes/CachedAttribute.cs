@@ -14,12 +14,12 @@ namespace Hubtel.Wallets.Api.Middleware.CustomHttpAttributes
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false)]
     public class CachedAttribute : Attribute, IAsyncActionFilter
     {
-        private readonly int _absoluteExpreTime;
+        private readonly int _absoluteExpireTime;
         private readonly int _unusedExpireTime;
 
         public CachedAttribute(int absoluteExpireTime, int unusedExpireTime)
         {
-            _absoluteExpreTime = absoluteExpireTime;
+            _absoluteExpireTime = absoluteExpireTime;
 
             _unusedExpireTime = unusedExpireTime;
         }
@@ -38,32 +38,49 @@ namespace Hubtel.Wallets.Api.Middleware.CustomHttpAttributes
             }
             var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
             var cacheKey = GenerateCacheKey(context.HttpContext.Request);
-            var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 
-            if (!string.IsNullOrEmpty(cachedResponse))
+            try
             {
-                var contentResult = new ContentResult
-                {
-                    Content = cachedResponse,
-                    ContentType = "application/json",
-                    StatusCode = 200
-                };
-                context.Result = contentResult; // cached data
+                var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 
-                return;
+                if (!string.IsNullOrEmpty(cachedResponse))
+                {
+                    var contentResult = new ContentResult
+                    {
+                        Content = cachedResponse,
+                        ContentType = "application/json",
+                        StatusCode = 200
+                    };
+                    context.Result = contentResult; // cached data
+
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                
             }
 
             var executedContext = await next();
             // if no cache continue and save response as cache
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
-                if (_unusedExpireTime == 0)
+                try
                 {
-                    await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_absoluteExpreTime), null);
+                    if (_unusedExpireTime == 0)
+                    {
+                        await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_absoluteExpireTime), null);
+                    }
+                    else if (_unusedExpireTime > 0)
+                    {
+                        await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_absoluteExpireTime), TimeSpan.FromSeconds(_unusedExpireTime));
+                    }
                 }
-                else if (_unusedExpireTime > 0)
+                catch (Exception ex)
                 {
-                    await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_absoluteExpreTime), TimeSpan.FromSeconds(_unusedExpireTime));
+                    Console.WriteLine(ex);
+                    
                 }
             }
         }
@@ -73,7 +90,7 @@ namespace Hubtel.Wallets.Api.Middleware.CustomHttpAttributes
             var keyBuilder = new StringBuilder().Append(request.Path);
             foreach (var (key, value) in request.Query.OrderBy(x => x.Key))
             {
-                keyBuilder.Append('|').Append(key).Append('-').Append(value);
+                keyBuilder.Append(':').Append(key).Append(':').Append(value);
             }
 
             return keyBuilder.ToString();

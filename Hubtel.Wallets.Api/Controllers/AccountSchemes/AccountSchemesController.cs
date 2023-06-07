@@ -32,7 +32,7 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [HttpGet]
         [SwaggerOperation(
             Summary = "Get all the payment Schemes for a payment types",
-            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Schemes avaliable for a particular Payment types",
+            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Schemes available for a particular Payment types",
             OperationId = "GetAllAccountSchemesByType",
             Tags = new[] { "AccountSchemes" }
         )]
@@ -46,7 +46,7 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [HttpGet]
         [SwaggerOperation(
             Summary = "Get all the payment Schemes",
-            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Schemes avaliable",
+            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Schemes available",
             OperationId = "GetAllAccountSchemes",
             Tags = new[] { "AccountSchemes" }
         )]
@@ -79,7 +79,7 @@ namespace Hubtel.Wallets.Api.Controllers.AccountSchemes
         [HttpGet]
         [SwaggerOperation(
             Summary = "Get all the payment types and corresponding payment Schemes",
-            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Types and Payment Schemes avaliable",
+            Description = "Requires admin privileges</br>. If successful returns a list of all the Payment Types and Payment Schemes available",
             OperationId = "GetAllTypesAndSchemes",
             Tags = new[] { "AccountSchemes" }
         )]
